@@ -289,9 +289,9 @@
     <div class="container">
         <div class="header">
             <div class="logo">📊</div>
-            <div class="title">Marts To Go 5 - Rock Hill</div>
+            <div class="title">Marts To Go 6</div>
             <div class="subtitle">Daily Sales Entry Form</div>
-            <div class="badge">💰 SALES DATA (Columns A-AE)</div>
+            <div class="badge">💰 SALES DATA (Columns A-AQ)</div>
         </div>
 
         <form id="salesForm">
@@ -531,6 +531,21 @@
                 </div>
             </div>
 
+            <!-- NEW: Food Waste/Bad Merchandise Section -->
+            <div class="section">
+                <div class="section-title">🗑️ Inventory Management</div>
+                <div class="section-grid">
+                    <div class="form-group">
+                        <label>Food Waste/Bad Merchandise</label>
+                        <input type="number" id="foodWaste" name="foodWaste" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                    <div class="form-group">
+                        <label>Purchase @ Retail (All Vendors)</label>
+                        <input type="number" id="purchaseRetail" name="purchaseRetail" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                </div>
+            </div>
+
             <!-- Short / Over Banner -->
             <div class="section full">
                 <div class="section-title">📊 Short / Over</div>
@@ -545,7 +560,7 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRtPRrewpp8pbtKeD3xdnrnPMTZtqouN85LPB6fV3AmA4MP6RU2ACBb2I8ZdMJKfhR/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz9H80qJsiX9sTKlIBd3JTfT_YzmJUc_KlqKEypReVSVwwgAE85l1gF1p2YiolA-cIl/exec";
 
         const form = document.getElementById('salesForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -717,6 +732,7 @@
             submitBtn.innerHTML = '<span class="spinner"></span>Submitting...';
 
             const formData = {
+                storeId: "MTG5",
                 month: document.getElementById('month').value,
                 date: document.getElementById('date').value,
                 localMealsSales: parseFloat(document.getElementById('localMealsSales').value) || null,
@@ -738,7 +754,9 @@
                 lottoPayout: parseFloat(document.getElementById('lottoPayout').value) || null,
                 loadedInAtm: parseFloat(document.getElementById('loadedInAtm').value) || null,
                 opsDeposit: parseFloat(document.getElementById('opsDeposit').value) || null,
-                lottoDeposit: parseFloat(document.getElementById('lottoDeposit').value) || null
+                lottoDeposit: parseFloat(document.getElementById('lottoDeposit').value) || null,
+                foodWaste: parseFloat(document.getElementById('foodWaste').value) || null,
+                purchaseRetail: parseFloat(document.getElementById('purchaseRetail').value) || null
             };
 
             try {
