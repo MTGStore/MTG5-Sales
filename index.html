@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marts To Go 5 - Daily Sales Entry</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1F4788 0%, #2C3E50 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            max-width: 900px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1F4788;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #333;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .required {
+            color: red;
+        }
+
+        .display-only {
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            text-align: right;
+        }
+
+        .display-only.tax-highlight {
+            background-color: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .display-only.cash-highlight {
+            background-color: #d1ecf1;
+            border-color: #0c5460;
+            color: #0c5460;
+        }
+
+        .display-only.lotto-highlight {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .short-over-banner {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: default;
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: white;
+        }
+
+        .short-over-banner.negative {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+            box-shadow: 0 4px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .short-over-banner.positive {
+            background: linear-gradient(135deg, #28a745 0%, #218838 100%);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .short-over-banner.zero {
+            background: #343a40;
+            box-shadow: 0 4px 15px rgba(52, 58, 64, 0.3);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #1F4788;
+            box-shadow: 0 0 0 3px rgba(31, 71, 136, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .section {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 5px solid #1F4788;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #1F4788;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .section-grid.full {
+            grid-template-columns: 1fr;
+        }
+
+        .section-grid.three-cols {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .with-comment {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .with-comment input,
+        .with-comment textarea {
+            width: 100%;
+        }
+
+        button.submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #1F4788 0%, #2C3E50 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+
+        button.submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(31, 71, 136, 0.4);
+        }
+
+        button.submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            border: 2px solid #28a745;
+            color: #155724;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            border: 2px solid #dc3545;
+            color: #721c24;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #1F4788;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">📊</div>
+            <div class="title">Marts To Go 5 - Rock Hill</div>
+            <div class="subtitle">Daily Sales Entry Form</div>
+            <div class="badge">💰 SALES DATA (Columns A-AE)</div>
+        </div>
+
+        <form id="salesForm">
+            <!-- Date Selection -->
+            <div class="section full">
+                <div class="section-title">📅 Date Selection</div>
+                <div class="section-grid full">
+                    <div class="form-group">
+                        <label>Month <span class="required">*</span></label>
+                        <select id="month" name="month" required>
+                            <option value="">Select Month</option>
+                            <option value="January">January</option>
+                            <option value="February">February</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                            <option value="July">July</option>
+                            <option value="August">August</option>
+                            <option value="September">September</option>
+                            <option value="October">October</option>
+                            <option value="November">November</option>
+                            <option value="December">December</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date (Day 1-31) <span class="required">*</span></label>
+                        <input type="number" id="date" name="date" min="1" max="31" placeholder="5" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sales Data Section -->
+            <div class="section">
+                <div class="section-title">💰 Sales Data</div>
+                <div class="section-grid">
+                    <div class="form-group">
+                        <label>Local Meals Sales (9%)</label>
+                        <input type="number" id="localMealsSales" name="localMealsSales" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                    <div class="form-group">
+                        <label>Regular Sales (7%)</label>
+                        <input type="number" id="regularSales" name="regularSales" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                    <div class="form-group">
+                        <label>No Tax Sales</label>
+                        <input type="number" id="noTaxSales" name="noTaxSales" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                </div>
+
+                <!-- Total Inside Sales Display -->
+                <div class="form-group full">
+                    <label>Total Inside Sales</label>
+                    <div class="display-only" id="totalInsideSalesDisplay">0.00</div>
+                </div>
+            </div>
+
+            <!-- Sales Tax Section -->
+            <div class="section">
+                <div class="section-title">💰 Sales Tax</div>
+                <div class="section-grid three-cols">
+                    <div class="form-group">
+                        <label>Local Meals Tax (9%)</label>
+                        <div class="display-only tax-highlight" id="localMealsTaxDisplay">0.00</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Regular Sales Tax (7%)</label>
+                        <div class="display-only tax-highlight" id="regularSalesTaxDisplay">0.00</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Total Sales Tax</label>
+                        <div class="display-only tax-highlight" id="totalSalesTaxDisplay">0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Money Order Section -->
+            <div class="section">
+                <div class="section-title">💵 Money Order</div>
+                <div class="section-grid">
+                    <div class="form-group">
+                        <label>MO Sales</label>
+                        <input type="number" id="moSales" name="moSales" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gas Section -->
+            <div class="section">
+                <div class="section-title">⛽ Gas</div>
+                <div class="section-grid">
+                    <div class="form-group">
+                        <label>Gas Volume</label>
+                        <input type="number" id="gasVolume" name="gasVolume" step="0.00001" placeholder="0.00000">
+                    </div>
+                    <div class="form-group">
+                        <label>Gas Sales</label>
+                        <input type="number" id="gasSales" name="gasSales" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                    <div class="form-group">
+                        <label>Credit/Debit</label>
+                        <input type="number" id="creditDebit" name="creditDebit" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                </div>
+
+                <!-- Expected SEI EFT Display -->
+                <div class="form-group full">
+                    <label>Expected SEI EFT</label>
+                    <div class="display-only" id="expectedSEIEFTDisplay">0.00</div>
+                </div>
+            </div>
+
+            <!-- Cash & Operations Section -->
+            <div class="section">
+                <div class="section-title">💵 Cash & Operations</div>
+                <div class="section-grid">
+                    <div class="form-group full">
+                        <label>Cash Pay Out + Explanation</label>
+                        <div class="with-comment">
+                            <div>
+                                <label style="font-size: 12px; margin-bottom: 5px;">Amount</label>
+                                <input type="number" id="cashPayOut" name="cashPayOut" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; margin-bottom: 5px;">Explanation</label>
+                                <textarea id="cashPayOutComment" name="cashPayOutComment" placeholder="e.g., Lottery Mistake, Refund"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>EBT RAJ</label>
+                        <input type="number" id="ebtRaj" name="ebtRaj" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                    <div class="form-group">
+                        <label>CREDIT/DEBIT RAJ</label>
+                        <input type="number" id="creditDebitRaj" name="creditDebitRaj" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                    <div class="form-group full">
+                        <label>Coupons + Explanation</label>
+                        <div class="with-comment">
+                            <div>
+                                <label style="font-size: 12px; margin-bottom: 5px;">Amount</label>
+                                <input type="number" id="coupons" name="coupons" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                            </div>
+                            <div>
+                                <label style="font-size: 12px; margin-bottom: 5px;">Explanation</label>
+                                <textarea id="couponsComment" name="couponsComment" placeholder="e.g., Manufacturer, Store, Digital"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Loyalty</label>
+                        <input type="number" id="loyalty" name="loyalty" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expected Cash Collection Section -->
+            <div class="section">
+                <div class="section-title">💳 Expected Cash Collection</div>
+                <div class="section-grid full">
+                    <div class="form-group">
+                        <label>Expected Cash Collection</label>
+                        <div class="display-only cash-highlight" id="expectedCashCollectionDisplay">0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lottery Section -->
+            <div class="section">
+                <div class="section-title">🎰 Lottery</div>
+                <div class="section-grid">
+                    <div class="form-group">
+                        <label>Scratch Off Sales</label>
+                        <input type="number" id="scratchOffSales" name="scratchOffSales" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                    <div class="form-group">
+                        <label>Online Sales</label>
+                        <input type="number" id="onlineSales" name="onlineSales" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                    <div class="form-group">
+                        <label>Total Lotto Sales</label>
+                        <div class="display-only lotto-highlight" id="totalLottoSalesDisplay">0.00</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Lotto Payout</label>
+                        <input type="number" id="lottoPayout" name="lottoPayout" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expected Lotto Deposit Section -->
+            <div class="section">
+                <div class="section-title">💳 Expected Lotto Deposit</div>
+                <div class="section-grid full">
+                    <div class="form-group">
+                        <label>Expected Lotto Deposit</label>
+                        <div class="display-only lotto-highlight" id="expectedLottoDepositDisplay">0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ATM Section -->
+            <div class="section">
+                <div class="section-title">🏧 ATM</div>
+                <div class="section-grid">
+                    <div class="form-group">
+                        <label>Loaded in ATM</label>
+                        <input type="number" id="loadedInAtm" name="loadedInAtm" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Deposits Section -->
+            <div class="section">
+                <div class="section-title">🏦 Deposits</div>
+                <div class="section-grid">
+                    <div class="form-group">
+                        <label>OPS Deposit</label>
+                        <input type="number" id="opsDeposit" name="opsDeposit" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                    <div class="form-group">
+                        <label>Lotto Deposit</label>
+                        <input type="number" id="lottoDeposit" name="lottoDeposit" step="0.01" placeholder="0.00" onchange="calculateAll()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expected Deposit Amount Section -->
+            <div class="section">
+                <div class="section-title">💰 Expected Deposit Amount</div>
+                <div class="section-grid full">
+                    <div class="form-group">
+                        <label>Expected Deposit Amount</label>
+                        <div class="display-only cash-highlight" id="expectedDepositAmountDisplay">0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Short / Over Banner -->
+            <div class="section full">
+                <div class="section-title">📊 Short / Over</div>
+                <div class="short-over-banner zero" id="shortOverBanner">
+                    Short / Over: 0.00
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="submit-btn">Submit Sales Data</button>
+            <div id="statusMessage" class="status-message"></div>
+        </form>
+    </div>
+
+    <script>
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRtPRrewpp8pbtKeD3xdnrnPMTZtqouN85LPB6fV3AmA4MP6RU2ACBb2I8ZdMJKfhR/exec";
+
+        const form = document.getElementById('salesForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const statusMessage = document.getElementById('statusMessage');
+
+        window.addEventListener('load', function() {
+            calculateAll();
+        });
+
+        function calculateAll() {
+            calculateTotals();
+            calculateExpectedSEIEFT();
+            calculateExpectedCashCollection();
+            calculateTotalLottoSales();
+            calculateExpectedLottoDeposit();
+            calculateExpectedDepositAmount();
+            calculateShortOver();
+        }
+
+        function calculateTotals() {
+            const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
+            const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
+            const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
+            
+            const totalInsideSales = localMeals + regularSales + noTaxSales;
+            document.getElementById('totalInsideSalesDisplay').textContent = totalInsideSales.toFixed(2);
+            
+            const localMealsTax = localMeals * 0.09;
+            document.getElementById('localMealsTaxDisplay').textContent = localMealsTax.toFixed(2);
+            
+            const regularSalesTax = regularSales * 0.07;
+            document.getElementById('regularSalesTaxDisplay').textContent = regularSalesTax.toFixed(2);
+            
+            const totalSalesTax = localMealsTax + regularSalesTax;
+            document.getElementById('totalSalesTaxDisplay').textContent = totalSalesTax.toFixed(2);
+        }
+
+        function calculateExpectedSEIEFT() {
+            const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
+            const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
+            const expected = gasSales - creditDebit;
+            document.getElementById('expectedSEIEFTDisplay').textContent = expected.toFixed(2);
+        }
+
+        function calculateExpectedCashCollection() {
+            const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
+            const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
+            const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
+            const totalInsideSales = localMeals + regularSales + noTaxSales;
+            
+            const localMealsTax = localMeals * 0.09;
+            const regularSalesTax = regularSales * 0.07;
+            const totalSalesTax = localMealsTax + regularSalesTax;
+            
+            const moSales = parseFloat(document.getElementById('moSales').value) || 0;
+            const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
+            
+            const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
+            const cashPayOut = parseFloat(document.getElementById('cashPayOut').value) || 0;
+            const ebtRaj = parseFloat(document.getElementById('ebtRaj').value) || 0;
+            const creditDebitRaj = parseFloat(document.getElementById('creditDebitRaj').value) || 0;
+            const coupons = parseFloat(document.getElementById('coupons').value) || 0;
+            const loyalty = parseFloat(document.getElementById('loyalty').value) || 0;
+            
+            const income = totalInsideSales + totalSalesTax + moSales + gasSales;
+            const expenses = creditDebit + cashPayOut + ebtRaj + creditDebitRaj + coupons + loyalty;
+            const expectedCashCollection = income - expenses;
+            
+            document.getElementById('expectedCashCollectionDisplay').textContent = expectedCashCollection.toFixed(2);
+        }
+
+        function calculateTotalLottoSales() {
+            const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
+            const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
+            const totalLottoSales = scratchOff + onlineSales;
+            document.getElementById('totalLottoSalesDisplay').textContent = totalLottoSales.toFixed(2);
+        }
+
+        function calculateExpectedLottoDeposit() {
+            const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
+            const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
+            const lottoPayout = parseFloat(document.getElementById('lottoPayout').value) || 0;
+            const expectedLottoDeposit = (scratchOff + onlineSales) - lottoPayout;
+            document.getElementById('expectedLottoDepositDisplay').textContent = expectedLottoDeposit.toFixed(2);
+        }
+
+        function calculateExpectedDepositAmount() {
+            const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
+            const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
+            const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
+            const totalInsideSales = localMeals + regularSales + noTaxSales;
+            
+            const localMealsTax = localMeals * 0.09;
+            const regularSalesTax = regularSales * 0.07;
+            const totalSalesTax = localMealsTax + regularSalesTax;
+            
+            const moSales = parseFloat(document.getElementById('moSales').value) || 0;
+            const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
+            const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
+            const cashPayOut = parseFloat(document.getElementById('cashPayOut').value) || 0;
+            const ebtRaj = parseFloat(document.getElementById('ebtRaj').value) || 0;
+            const creditDebitRaj = parseFloat(document.getElementById('creditDebitRaj').value) || 0;
+            const coupons = parseFloat(document.getElementById('coupons').value) || 0;
+            const loyalty = parseFloat(document.getElementById('loyalty').value) || 0;
+            
+            const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
+            const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
+            const lottoPayout = parseFloat(document.getElementById('lottoPayout').value) || 0;
+            const loadedInAtm = parseFloat(document.getElementById('loadedInAtm').value) || 0;
+            
+            const expectedCashCollection = (totalInsideSales + totalSalesTax + moSales + gasSales) - (creditDebit + cashPayOut + ebtRaj + creditDebitRaj + coupons + loyalty);
+            const expectedLottoDeposit = (scratchOff + onlineSales) - lottoPayout;
+            const expectedDepositAmount = (expectedCashCollection + expectedLottoDeposit) - loadedInAtm;
+            
+            document.getElementById('expectedDepositAmountDisplay').textContent = expectedDepositAmount.toFixed(2);
+        }
+
+        function calculateShortOver() {
+            const opsDeposit = parseFloat(document.getElementById('opsDeposit').value) || 0;
+            const lottoDeposit = parseFloat(document.getElementById('lottoDeposit').value) || 0;
+            
+            const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
+            const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
+            const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
+            const totalInsideSales = localMeals + regularSales + noTaxSales;
+            
+            const localMealsTax = localMeals * 0.09;
+            const regularSalesTax = regularSales * 0.07;
+            const totalSalesTax = localMealsTax + regularSalesTax;
+            
+            const moSales = parseFloat(document.getElementById('moSales').value) || 0;
+            const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
+            const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
+            const cashPayOut = parseFloat(document.getElementById('cashPayOut').value) || 0;
+            const ebtRaj = parseFloat(document.getElementById('ebtRaj').value) || 0;
+            const creditDebitRaj = parseFloat(document.getElementById('creditDebitRaj').value) || 0;
+            const coupons = parseFloat(document.getElementById('coupons').value) || 0;
+            const loyalty = parseFloat(document.getElementById('loyalty').value) || 0;
+            
+            const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
+            const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
+            const lottoPayout = parseFloat(document.getElementById('lottoPayout').value) || 0;
+            const loadedInAtm = parseFloat(document.getElementById('loadedInAtm').value) || 0;
+            
+            const expectedCashCollection = (totalInsideSales + totalSalesTax + moSales + gasSales) - (creditDebit + cashPayOut + ebtRaj + creditDebitRaj + coupons + loyalty);
+            const expectedLottoDeposit = (scratchOff + onlineSales) - lottoPayout;
+            const expectedDepositAmount = (expectedCashCollection + expectedLottoDeposit) - loadedInAtm;
+            
+            const shortOver = (opsDeposit + lottoDeposit) - expectedDepositAmount;
+            
+            const banner = document.getElementById('shortOverBanner');
+            banner.textContent = `Short / Over: ${shortOver.toFixed(2)}`;
+            banner.classList.remove('negative', 'positive', 'zero');
+            
+            if (shortOver < 0) {
+                banner.classList.add('negative');
+            } else if (shortOver > 0) {
+                banner.classList.add('positive');
+            } else {
+                banner.classList.add('zero');
+            }
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            statusMessage.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="spinner"></span>Submitting...';
+
+            const formData = {
+                month: document.getElementById('month').value,
+                date: document.getElementById('date').value,
+                localMealsSales: parseFloat(document.getElementById('localMealsSales').value) || null,
+                regularSales: parseFloat(document.getElementById('regularSales').value) || null,
+                noTaxSales: parseFloat(document.getElementById('noTaxSales').value) || null,
+                moSales: parseFloat(document.getElementById('moSales').value) || null,
+                gasVolume: parseFloat(document.getElementById('gasVolume').value) || null,
+                gasSales: parseFloat(document.getElementById('gasSales').value) || null,
+                creditDebit: parseFloat(document.getElementById('creditDebit').value) || null,
+                cashPayOut: parseFloat(document.getElementById('cashPayOut').value) || null,
+                cashPayOutComment: document.getElementById('cashPayOutComment').value || null,
+                ebtRaj: parseFloat(document.getElementById('ebtRaj').value) || null,
+                creditDebitRaj: parseFloat(document.getElementById('creditDebitRaj').value) || null,
+                coupons: parseFloat(document.getElementById('coupons').value) || null,
+                couponsComment: document.getElementById('couponsComment').value || null,
+                loyalty: parseFloat(document.getElementById('loyalty').value) || null,
+                scratchOffSales: parseFloat(document.getElementById('scratchOffSales').value) || null,
+                onlineSales: parseFloat(document.getElementById('onlineSales').value) || null,
+                lottoPayout: parseFloat(document.getElementById('lottoPayout').value) || null,
+                loadedInAtm: parseFloat(document.getElementById('loadedInAtm').value) || null,
+                opsDeposit: parseFloat(document.getElementById('opsDeposit').value) || null,
+                lottoDeposit: parseFloat(document.getElementById('lottoDeposit').value) || null
+            };
+
+            try {
+                const response = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify(formData),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                statusMessage.className = 'status-message success';
+                statusMessage.innerHTML = '✅ Success! Sales data has been submitted.';
+                statusMessage.style.display = 'block';
+
+                form.reset();
+                calculateAll();
+
+            } catch (error) {
+                statusMessage.className = 'status-message error';
+                statusMessage.innerHTML = '❌ Error: ' + error.message;
+                statusMessage.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Submit Sales Data';
+            }
+        });
+    </script>
+</body>
+</html>
