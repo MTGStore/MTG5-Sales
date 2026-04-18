@@ -559,256 +559,262 @@
         </form>
     </div>
 
-    <script>
-       const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDHELQk_ys0nTmTvjvOGZO0m_oboNy8zbtb6J5_eViWOq_v3C2d-qaNpgetUtTntrlVg/exec";
-        const form = document.getElementById('salesForm');
-        const submitBtn = document.getElementById('submitBtn');
-        const statusMessage = document.getElementById('statusMessage');
+ <script>
+const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDHELQk_ys0nTmTvjvOGZO0m_oboNy8zbtb6J5_eViWOq_v3C2d-qaNpgetUtTntrlVg/exec";
+const form = document.getElementById('salesForm');
+const submitBtn = document.getElementById('submitBtn');
+const statusMessage = document.getElementById('statusMessage');
 
-        window.addEventListener('load', function() {
-            calculateAll();
-        });
-
-        function calculateAll() {
-            calculateTotals();
-            calculateExpectedSEIEFT();
-            calculateExpectedCashCollection();
-            calculateTotalLottoSales();
-            calculateExpectedLottoDeposit();
-            calculateExpectedDepositAmount();
-            calculateShortOver();
-        }
-
-        function calculateTotals() {
-            const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
-            const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
-            const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
-            
-            const totalInsideSales = localMeals + regularSales + noTaxSales;
-            document.getElementById('totalInsideSalesDisplay').textContent = totalInsideSales.toFixed(2);
-            
-            const localMealsTax = localMeals * 0.09;
-            document.getElementById('localMealsTaxDisplay').textContent = localMealsTax.toFixed(2);
-            
-            const regularSalesTax = regularSales * 0.07;
-            document.getElementById('regularSalesTaxDisplay').textContent = regularSalesTax.toFixed(2);
-            
-            const totalSalesTax = localMealsTax + regularSalesTax;
-            document.getElementById('totalSalesTaxDisplay').textContent = totalSalesTax.toFixed(2);
-        }
-
-        function calculateExpectedSEIEFT() {
-            const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
-            const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
-            const expected = gasSales - creditDebit;
-            document.getElementById('expectedSEIEFTDisplay').textContent = expected.toFixed(2);
-        }
-
-        function calculateExpectedCashCollection() {
-            const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
-            const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
-            const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
-            const totalInsideSales = localMeals + regularSales + noTaxSales;
-            
-            const localMealsTax = localMeals * 0.09;
-            const regularSalesTax = regularSales * 0.07;
-            const totalSalesTax = localMealsTax + regularSalesTax;
-            
-            const moSales = parseFloat(document.getElementById('moSales').value) || 0;
-            const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
-            
-            const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
-            const cashPayOut = parseFloat(document.getElementById('cashPayOut').value) || 0;
-            const ebtRaj = parseFloat(document.getElementById('ebtRaj').value) || 0;
-            const creditDebitRaj = parseFloat(document.getElementById('creditDebitRaj').value) || 0;
-            const coupons = parseFloat(document.getElementById('coupons').value) || 0;
-            const loyalty = parseFloat(document.getElementById('loyalty').value) || 0;
-            
-            const income = totalInsideSales + totalSalesTax + moSales + gasSales;
-            const expenses = creditDebit + cashPayOut + ebtRaj + creditDebitRaj + coupons + loyalty;
-            const expectedCashCollection = income - expenses;
-            
-            document.getElementById('expectedCashCollectionDisplay').textContent = expectedCashCollection.toFixed(2);
-        }
-
-        function calculateTotalLottoSales() {
-            const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
-            const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
-            const totalLottoSales = scratchOff + onlineSales;
-            document.getElementById('totalLottoSalesDisplay').textContent = totalLottoSales.toFixed(2);
-        }
-
-        function calculateExpectedLottoDeposit() {
-            const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
-            const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
-            const lottoPayout = parseFloat(document.getElementById('lottoPayout').value) || 0;
-            const expectedLottoDeposit = (scratchOff + onlineSales) - lottoPayout;
-            document.getElementById('expectedLottoDepositDisplay').textContent = expectedLottoDeposit.toFixed(2);
-        }
-
-        function calculateExpectedDepositAmount() {
-            const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
-            const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
-            const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
-            const totalInsideSales = localMeals + regularSales + noTaxSales;
-            
-            const localMealsTax = localMeals * 0.09;
-            const regularSalesTax = regularSales * 0.07;
-            const totalSalesTax = localMealsTax + regularSalesTax;
-            
-            const moSales = parseFloat(document.getElementById('moSales').value) || 0;
-            const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
-            const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
-            const cashPayOut = parseFloat(document.getElementById('cashPayOut').value) || 0;
-            const ebtRaj = parseFloat(document.getElementById('ebtRaj').value) || 0;
-            const creditDebitRaj = parseFloat(document.getElementById('creditDebitRaj').value) || 0;
-            const coupons = parseFloat(document.getElementById('coupons').value) || 0;
-            const loyalty = parseFloat(document.getElementById('loyalty').value) || 0;
-            
-            const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
-            const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
-            const lottoPayout = parseFloat(document.getElementById('lottoPayout').value) || 0;
-            const loadedInAtm = parseFloat(document.getElementById('loadedInAtm').value) || 0;
-            
-            const expectedCashCollection = (totalInsideSales + totalSalesTax + moSales + gasSales) - (creditDebit + cashPayOut + ebtRaj + creditDebitRaj + coupons + loyalty);
-            const expectedLottoDeposit = (scratchOff + onlineSales) - lottoPayout;
-            const expectedDepositAmount = (expectedCashCollection + expectedLottoDeposit) - loadedInAtm;
-            
-            document.getElementById('expectedDepositAmountDisplay').textContent = expectedDepositAmount.toFixed(2);
-        }
-
-        function calculateShortOver() {
-            const opsDeposit = parseFloat(document.getElementById('opsDeposit').value) || 0;
-            const lottoDeposit = parseFloat(document.getElementById('lottoDeposit').value) || 0;
-            
-            const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
-            const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
-            const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
-            const totalInsideSales = localMeals + regularSales + noTaxSales;
-            
-            const localMealsTax = localMeals * 0.09;
-            const regularSalesTax = regularSales * 0.07;
-            const totalSalesTax = localMealsTax + regularSalesTax;
-            
-            const moSales = parseFloat(document.getElementById('moSales').value) || 0;
-            const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
-            const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
-            const cashPayOut = parseFloat(document.getElementById('cashPayOut').value) || 0;
-            const ebtRaj = parseFloat(document.getElementById('ebtRaj').value) || 0;
-            const creditDebitRaj = parseFloat(document.getElementById('creditDebitRaj').value) || 0;
-            const coupons = parseFloat(document.getElementById('coupons').value) || 0;
-            const loyalty = parseFloat(document.getElementById('loyalty').value) || 0;
-            
-            const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
-            const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
-            const lottoPayout = parseFloat(document.getElementById('lottoPayout').value) || 0;
-            const loadedInAtm = parseFloat(document.getElementById('loadedInAtm').value) || 0;
-            
-            const expectedCashCollection = (totalInsideSales + totalSalesTax + moSales + gasSales) - (creditDebit + cashPayOut + ebtRaj + creditDebitRaj + coupons + loyalty);
-            const expectedLottoDeposit = (scratchOff + onlineSales) - lottoPayout;
-            const expectedDepositAmount = (expectedCashCollection + expectedLottoDeposit) - loadedInAtm;
-            
-            const shortOver = (opsDeposit + lottoDeposit) - expectedDepositAmount;
-            
-            const banner = document.getElementById('shortOverBanner');
-            banner.textContent = `Short / Over: ${shortOver.toFixed(2)}`;
-            banner.classList.remove('negative', 'positive', 'zero');
-            
-            if (shortOver < 0) {
-                banner.classList.add('negative');
-            } else if (shortOver > 0) {
-                banner.classList.add('positive');
-            } else {
-                banner.classList.add('zero');
-            }
-        }
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            statusMessage.style.display = 'none';
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<span class="spinner"></span>Submitting...';
-
-            const formData = {
-                storeId: "MTG5",
-                month: document.getElementById('month').value,
-                date: document.getElementById('date').value,
-                localMealsSales: parseFloat(document.getElementById('localMealsSales').value) || null,
-                regularSales: parseFloat(document.getElementById('regularSales').value) || null,
-                noTaxSales: parseFloat(document.getElementById('noTaxSales').value) || null,
-                moSales: parseFloat(document.getElementById('moSales').value) || null,
-                gasVolume: parseFloat(document.getElementById('gasVolume').value) || null,
-                gasSales: parseFloat(document.getElementById('gasSales').value) || null,
-                creditDebit: parseFloat(document.getElementById('creditDebit').value) || null,
-                cashPayOut: parseFloat(document.getElementById('cashPayOut').value) || null,
-                cashPayOutComment: document.getElementById('cashPayOutComment').value || null,
-                ebtRaj: parseFloat(document.getElementById('ebtRaj').value) || null,
-                creditDebitRaj: parseFloat(document.getElementById('creditDebitRaj').value) || null,
-                coupons: parseFloat(document.getElementById('coupons').value) || null,
-                couponsComment: document.getElementById('couponsComment').value || null,
-                loyalty: parseFloat(document.getElementById('loyalty').value) || null,
-                scratchOffSales: parseFloat(document.getElementById('scratchOffSales').value) || null,
-                onlineSales: parseFloat(document.getElementById('onlineSales').value) || null,
-                lottoPayout: parseFloat(document.getElementById('lottoPayout').value) || null,
-                loadedInAtm: parseFloat(document.getElementById('loadedInAtm').value) || null,
-                opsDeposit: parseFloat(document.getElementById('opsDeposit').value) || null,
-                lottoDeposit: parseFloat(document.getElementById('lottoDeposit').value) || null,
-                foodWaste: parseFloat(document.getElementById('foodWaste').value) || null,
-                purchaseRetail: parseFloat(document.getElementById('purchaseRetail').value) || null
-            };
-
-            try {
-                // Create FormData instead of JSON
-                const formDataObj = new FormData();
-                formDataObj.append('storeId', formData.storeId);
-                formDataObj.append('month', formData.month);
-                formDataObj.append('date', formData.date);
-                formDataObj.append('localMealsSales', formData.localMealsSales);
-                formDataObj.append('regularSales', formData.regularSales);
-                formDataObj.append('noTaxSales', formData.noTaxSales);
-                formDataObj.append('moSales', formData.moSales);
-                formDataObj.append('gasVolume', formData.gasVolume);
-                formDataObj.append('gasSales', formData.gasSales);
-                formDataObj.append('creditDebit', formData.creditDebit);
-                formDataObj.append('cashPayOut', formData.cashPayOut);
-                formDataObj.append('cashPayOutComment', formData.cashPayOutComment);
-                formDataObj.append('ebtRaj', formData.ebtRaj);
-                formDataObj.append('creditDebitRaj', formData.creditDebitRaj);
-                formDataObj.append('coupons', formData.coupons);
-                formDataObj.append('couponsComment', formData.couponsComment);
-                formDataObj.append('loyalty', formData.loyalty);
-                formDataObj.append('scratchOffSales', formData.scratchOffSales);
-                formDataObj.append('onlineSales', formData.onlineSales);
-                formDataObj.append('lottoPayout', formData.lottoPayout);
-                formDataObj.append('loadedInAtm', formData.loadedInAtm);
-                formDataObj.append('opsDeposit', formData.opsDeposit);
-                formDataObj.append('lottoDeposit', formData.lottoDeposit);
-                formDataObj.append('foodWaste', formData.foodWaste);
-                formDataObj.append('purchaseRetail', formData.purchaseRetail);
-
-                const response = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: formDataObj
+window.addEventListener('load', function() {
+    calculateAll();
 });
 
-                statusMessage.className = 'status-message success';
-                statusMessage.innerHTML = '✅ Success! Sales data has been submitted.';
-                statusMessage.style.display = 'block';
+function calculateAll() {
+    calculateTotals();
+    calculateExpectedSEIEFT();
+    calculateExpectedCashCollection();
+    calculateTotalLottoSales();
+    calculateExpectedLottoDeposit();
+    calculateExpectedDepositAmount();
+    calculateShortOver();
+}
 
-                form.reset();
-                calculateAll();
+function calculateTotals() {
+    const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
+    const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
+    const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
+    
+    const totalInsideSales = localMeals + regularSales + noTaxSales;
+    document.getElementById('totalInsideSalesDisplay').textContent = totalInsideSales.toFixed(2);
+    
+    const localMealsTax = localMeals * 0.09;
+    document.getElementById('localMealsTaxDisplay').textContent = localMealsTax.toFixed(2);
+    
+    const regularSalesTax = regularSales * 0.07;
+    document.getElementById('regularSalesTaxDisplay').textContent = regularSalesTax.toFixed(2);
+    
+    const totalSalesTax = localMealsTax + regularSalesTax;
+    document.getElementById('totalSalesTaxDisplay').textContent = totalSalesTax.toFixed(2);
+}
 
-            } catch (error) {
-                statusMessage.className = 'status-message error';
-                statusMessage.innerHTML = '❌ Error: ' + error.message;
-                statusMessage.style.display = 'block';
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = 'Submit Sales Data';
-            }
+function calculateExpectedSEIEFT() {
+    const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
+    const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
+    const expected = gasSales - creditDebit;
+    document.getElementById('expectedSEIEFTDisplay').textContent = expected.toFixed(2);
+}
+
+function calculateExpectedCashCollection() {
+    const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
+    const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
+    const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
+    const totalInsideSales = localMeals + regularSales + noTaxSales;
+    
+    const localMealsTax = localMeals * 0.09;
+    const regularSalesTax = regularSales * 0.07;
+    const totalSalesTax = localMealsTax + regularSalesTax;
+    
+    const moSales = parseFloat(document.getElementById('moSales').value) || 0;
+    const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
+    
+    const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
+    const cashPayOut = parseFloat(document.getElementById('cashPayOut').value) || 0;
+    const ebtRaj = parseFloat(document.getElementById('ebtRaj').value) || 0;
+    const creditDebitRaj = parseFloat(document.getElementById('creditDebitRaj').value) || 0;
+    const coupons = parseFloat(document.getElementById('coupons').value) || 0;
+    const loyalty = parseFloat(document.getElementById('loyalty').value) || 0;
+    
+    const income = totalInsideSales + totalSalesTax + moSales + gasSales;
+    const expenses = creditDebit + cashPayOut + ebtRaj + creditDebitRaj + coupons + loyalty;
+    const expectedCashCollection = income - expenses;
+    
+    document.getElementById('expectedCashCollectionDisplay').textContent = expectedCashCollection.toFixed(2);
+}
+
+function calculateTotalLottoSales() {
+    const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
+    const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
+    const totalLottoSales = scratchOff + onlineSales;
+    document.getElementById('totalLottoSalesDisplay').textContent = totalLottoSales.toFixed(2);
+}
+
+function calculateExpectedLottoDeposit() {
+    const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
+    const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
+    const lottoPayout = parseFloat(document.getElementById('lottoPayout').value) || 0;
+    const expectedLottoDeposit = (scratchOff + onlineSales) - lottoPayout;
+    document.getElementById('expectedLottoDepositDisplay').textContent = expectedLottoDeposit.toFixed(2);
+}
+
+function calculateExpectedDepositAmount() {
+    const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
+    const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
+    const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
+    const totalInsideSales = localMeals + regularSales + noTaxSales;
+    
+    const localMealsTax = localMeals * 0.09;
+    const regularSalesTax = regularSales * 0.07;
+    const totalSalesTax = localMealsTax + regularSalesTax;
+    
+    const moSales = parseFloat(document.getElementById('moSales').value) || 0;
+    const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
+    const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
+    const cashPayOut = parseFloat(document.getElementById('cashPayOut').value) || 0;
+    const ebtRaj = parseFloat(document.getElementById('ebtRaj').value) || 0;
+    const creditDebitRaj = parseFloat(document.getElementById('creditDebitRaj').value) || 0;
+    const coupons = parseFloat(document.getElementById('coupons').value) || 0;
+    const loyalty = parseFloat(document.getElementById('loyalty').value) || 0;
+    
+    const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
+    const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
+    const lottoPayout = parseFloat(document.getElementById('lottoPayout').value) || 0;
+    const loadedInAtm = parseFloat(document.getElementById('loadedInAtm').value) || 0;
+    
+    const expectedCashCollection = (totalInsideSales + totalSalesTax + moSales + gasSales) - (creditDebit + cashPayOut + ebtRaj + creditDebitRaj + coupons + loyalty);
+    const expectedLottoDeposit = (scratchOff + onlineSales) - lottoPayout;
+    const expectedDepositAmount = (expectedCashCollection + expectedLottoDeposit) - loadedInAtm;
+    
+    document.getElementById('expectedDepositAmountDisplay').textContent = expectedDepositAmount.toFixed(2);
+}
+
+function calculateShortOver() {
+    const opsDeposit = parseFloat(document.getElementById('opsDeposit').value) || 0;
+    const lottoDeposit = parseFloat(document.getElementById('lottoDeposit').value) || 0;
+    
+    const localMeals = parseFloat(document.getElementById('localMealsSales').value) || 0;
+    const regularSales = parseFloat(document.getElementById('regularSales').value) || 0;
+    const noTaxSales = parseFloat(document.getElementById('noTaxSales').value) || 0;
+    const totalInsideSales = localMeals + regularSales + noTaxSales;
+    
+    const localMealsTax = localMeals * 0.09;
+    const regularSalesTax = regularSales * 0.07;
+    const totalSalesTax = localMealsTax + regularSalesTax;
+    
+    const moSales = parseFloat(document.getElementById('moSales').value) || 0;
+    const gasSales = parseFloat(document.getElementById('gasSales').value) || 0;
+    const creditDebit = parseFloat(document.getElementById('creditDebit').value) || 0;
+    const cashPayOut = parseFloat(document.getElementById('cashPayOut').value) || 0;
+    const ebtRaj = parseFloat(document.getElementById('ebtRaj').value) || 0;
+    const creditDebitRaj = parseFloat(document.getElementById('creditDebitRaj').value) || 0;
+    const coupons = parseFloat(document.getElementById('coupons').value) || 0;
+    const loyalty = parseFloat(document.getElementById('loyalty').value) || 0;
+    
+    const scratchOff = parseFloat(document.getElementById('scratchOffSales').value) || 0;
+    const onlineSales = parseFloat(document.getElementById('onlineSales').value) || 0;
+    const lottoPayout = parseFloat(document.getElementById('lottoPayout').value) || 0;
+    const loadedInAtm = parseFloat(document.getElementById('loadedInAtm').value) || 0;
+    
+    const expectedCashCollection = (totalInsideSales + totalSalesTax + moSales + gasSales) - (creditDebit + cashPayOut + ebtRaj + creditDebitRaj + coupons + loyalty);
+    const expectedLottoDeposit = (scratchOff + onlineSales) - lottoPayout;
+    const expectedDepositAmount = (expectedCashCollection + expectedLottoDeposit) - loadedInAtm;
+    
+    const shortOver = (opsDeposit + lottoDeposit) - expectedDepositAmount;
+    
+    const banner = document.getElementById('shortOverBanner');
+    banner.textContent = `Short / Over: ${shortOver.toFixed(2)}`;
+    banner.classList.remove('negative', 'positive', 'zero');
+    
+    if (shortOver < 0) {
+        banner.classList.add('negative');
+    } else if (shortOver > 0) {
+        banner.classList.add('positive');
+    } else {
+        banner.classList.add('zero');
+    }
+}
+
+form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    statusMessage.style.display = 'none';
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span>Submitting...';
+
+    const formData = {
+        storeId: "MTG5",
+        month: document.getElementById('month').value,
+        date: document.getElementById('date').value,
+        localMealsSales: parseFloat(document.getElementById('localMealsSales').value) || null,
+        regularSales: parseFloat(document.getElementById('regularSales').value) || null,
+        noTaxSales: parseFloat(document.getElementById('noTaxSales').value) || null,
+        moSales: parseFloat(document.getElementById('moSales').value) || null,
+        gasVolume: parseFloat(document.getElementById('gasVolume').value) || null,
+        gasSales: parseFloat(document.getElementById('gasSales').value) || null,
+        creditDebit: parseFloat(document.getElementById('creditDebit').value) || null,
+        cashPayOut: parseFloat(document.getElementById('cashPayOut').value) || null,
+        cashPayOutComment: document.getElementById('cashPayOutComment').value || null,
+        ebtRaj: parseFloat(document.getElementById('ebtRaj').value) || null,
+        creditDebitRaj: parseFloat(document.getElementById('creditDebitRaj').value) || null,
+        coupons: parseFloat(document.getElementById('coupons').value) || null,
+        couponsComment: document.getElementById('couponsComment').value || null,
+        loyalty: parseFloat(document.getElementById('loyalty').value) || null,
+        scratchOffSales: parseFloat(document.getElementById('scratchOffSales').value) || null,
+        onlineSales: parseFloat(document.getElementById('onlineSales').value) || null,
+        lottoPayout: parseFloat(document.getElementById('lottoPayout').value) || null,
+        loadedInAtm: parseFloat(document.getElementById('loadedInAtm').value) || null,
+        opsDeposit: parseFloat(document.getElementById('opsDeposit').value) || null,
+        lottoDeposit: parseFloat(document.getElementById('lottoDeposit').value) || null,
+        foodWaste: parseFloat(document.getElementById('foodWaste').value) || null,
+        purchaseRetail: parseFloat(document.getElementById('purchaseRetail').value) || null
+    };
+
+    try {
+        const formDataObj = new FormData();
+        formDataObj.append('storeId', formData.storeId);
+        formDataObj.append('month', formData.month);
+        formDataObj.append('date', formData.date);
+        formDataObj.append('localMealsSales', formData.localMealsSales);
+        formDataObj.append('regularSales', formData.regularSales);
+        formDataObj.append('noTaxSales', formData.noTaxSales);
+        formDataObj.append('moSales', formData.moSales);
+        formDataObj.append('gasVolume', formData.gasVolume);
+        formDataObj.append('gasSales', formData.gasSales);
+        formDataObj.append('creditDebit', formData.creditDebit);
+        formDataObj.append('cashPayOut', formData.cashPayOut);
+        formDataObj.append('cashPayOutComment', formData.cashPayOutComment);
+        formDataObj.append('ebtRaj', formData.ebtRaj);
+        formDataObj.append('creditDebitRaj', formData.creditDebitRaj);
+        formDataObj.append('coupons', formData.coupons);
+        formDataObj.append('couponsComment', formData.couponsComment);
+        formDataObj.append('loyalty', formData.loyalty);
+        formDataObj.append('scratchOffSales', formData.scratchOffSales);
+        formDataObj.append('onlineSales', formData.onlineSales);
+        formDataObj.append('lottoPayout', formData.lottoPayout);
+        formDataObj.append('loadedInAtm', formData.loadedInAtm);
+        formDataObj.append('opsDeposit', formData.opsDeposit);
+        formDataObj.append('lottoDeposit', formData.lottoDeposit);
+        formDataObj.append('foodWaste', formData.foodWaste);
+        formDataObj.append('purchaseRetail', formData.purchaseRetail);
+
+        console.log("Attempting to fetch: " + APPS_SCRIPT_URL);
+        console.log("FormData being sent:", formDataObj);
+        
+        const response = await fetch(APPS_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formDataObj
         });
-    </script>
+
+        console.log("Fetch completed. Response status: " + response.status);
+        console.log("Response:", response);
+
+        statusMessage.className = 'status-message success';
+        statusMessage.innerHTML = '✅ Success! Sales data has been submitted.';
+        statusMessage.style.display = 'block';
+
+        form.reset();
+        calculateAll();
+
+    } catch (error) {
+        console.log("Fetch error: " + error.message);
+        statusMessage.className = 'status-message error';
+        statusMessage.innerHTML = '❌ Error: ' + error.message;
+        statusMessage.style.display = 'block';
+    } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Submit Sales Data';
+    }
+});
+</script>
 </body>
 </html>
