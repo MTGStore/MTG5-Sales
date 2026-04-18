@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marts To Go 5 - Daily Sales Entry</title>
+    <title>Marts To Go 6 - Daily Sales Entry</title>
     <style>
         * {
             margin: 0;
@@ -762,7 +762,6 @@
             try {
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors',
                     body: JSON.stringify(formData),
                     headers: {
                         'Content-Type': 'application/json'
