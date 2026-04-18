@@ -760,12 +760,37 @@
             };
 
             try {
+                // Create FormData instead of JSON
+                const formDataObj = new FormData();
+                formDataObj.append('storeId', formData.storeId);
+                formDataObj.append('month', formData.month);
+                formDataObj.append('date', formData.date);
+                formDataObj.append('localMealsSales', formData.localMealsSales);
+                formDataObj.append('regularSales', formData.regularSales);
+                formDataObj.append('noTaxSales', formData.noTaxSales);
+                formDataObj.append('moSales', formData.moSales);
+                formDataObj.append('gasVolume', formData.gasVolume);
+                formDataObj.append('gasSales', formData.gasSales);
+                formDataObj.append('creditDebit', formData.creditDebit);
+                formDataObj.append('cashPayOut', formData.cashPayOut);
+                formDataObj.append('cashPayOutComment', formData.cashPayOutComment);
+                formDataObj.append('ebtRaj', formData.ebtRaj);
+                formDataObj.append('creditDebitRaj', formData.creditDebitRaj);
+                formDataObj.append('coupons', formData.coupons);
+                formDataObj.append('couponsComment', formData.couponsComment);
+                formDataObj.append('loyalty', formData.loyalty);
+                formDataObj.append('scratchOffSales', formData.scratchOffSales);
+                formDataObj.append('onlineSales', formData.onlineSales);
+                formDataObj.append('lottoPayout', formData.lottoPayout);
+                formDataObj.append('loadedInAtm', formData.loadedInAtm);
+                formDataObj.append('opsDeposit', formData.opsDeposit);
+                formDataObj.append('lottoDeposit', formData.lottoDeposit);
+                formDataObj.append('foodWaste', formData.foodWaste);
+                formDataObj.append('purchaseRetail', formData.purchaseRetail);
+
                 const response = await fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
-                    body: JSON.stringify(formData),
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                    body: formDataObj
                 });
 
                 statusMessage.className = 'status-message success';
