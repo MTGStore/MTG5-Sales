@@ -790,10 +790,9 @@ form.addEventListener('submit', async (e) => {
         console.log("FormData being sent:", formDataObj);
         
         const response = await fetch(APPS_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: formDataObj
-        });
+    method: 'POST',
+    body: formDataObj
+});
 
         console.log("Fetch completed. Response status: " + response.status);
         console.log("Response:", response);
