@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marts To Go 6 - Daily Sales Entry</title>
+    <title>Marts To Go 5 - Daily Sales Entry</title>
     <style>
         * {
             margin: 0;
@@ -291,7 +291,7 @@
             <div class="logo">📊</div>
             <div class="title">Marts To Go 5</div>
             <div class="subtitle">Daily Sales Entry Form</div>
-            <div class="badge">💰 SALES DATA (Columns A-AQ)</div>
+            <div class="badge">💰 SALES DATA (Columns A-AF)</div>
         </div>
 
         <form id="salesForm">
@@ -531,7 +531,7 @@
                 </div>
             </div>
 
-            <!-- NEW: Food Waste/Bad Merchandise Section -->
+            <!-- Food Waste/Bad Merchandise & Inventory Management Section -->
             <div class="section">
                 <div class="section-title">🗑️ Inventory Management</div>
                 <div class="section-grid">
@@ -548,6 +548,7 @@
                         <input type="number" id="promoDiscount" name="promoDiscount" step="0.01" placeholder="0.00" onchange="calculateAll()">
                     </div>
                 </div>
+            </div>
 
             <!-- Short / Over Banner -->
             <div class="section full">
@@ -562,7 +563,7 @@
         </form>
     </div>
 
- <script>
+    <script>
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzDHELQk_ys0nTmTvjvOGZO0m_oboNy8zbtb6J5_eViWOq_v3C2d-qaNpgetUtTntrlVg/exec";
 const form = document.getElementById('salesForm');
 const submitBtn = document.getElementById('submitBtn');
@@ -758,7 +759,8 @@ form.addEventListener('submit', async (e) => {
         opsDeposit: parseFloat(document.getElementById('opsDeposit').value) || null,
         lottoDeposit: parseFloat(document.getElementById('lottoDeposit').value) || null,
         foodWaste: parseFloat(document.getElementById('foodWaste').value) || null,
-        purchaseRetail: parseFloat(document.getElementById('purchaseRetail').value) || null
+        purchaseRetail: parseFloat(document.getElementById('purchaseRetail').value) || null,
+        promoDiscount: parseFloat(document.getElementById('promoDiscount').value) || null
     };
 
     try {
@@ -788,14 +790,15 @@ form.addEventListener('submit', async (e) => {
         formDataObj.append('lottoDeposit', formData.lottoDeposit);
         formDataObj.append('foodWaste', formData.foodWaste);
         formDataObj.append('purchaseRetail', formData.purchaseRetail);
+        formDataObj.append('promoDiscount', formData.promoDiscount);
 
         console.log("Attempting to fetch: " + APPS_SCRIPT_URL);
         console.log("FormData being sent:", formDataObj);
         
         const response = await fetch(APPS_SCRIPT_URL, {
-    method: 'POST',
-    body: formDataObj
-});
+            method: 'POST',
+            body: formDataObj
+        });
 
         console.log("Fetch completed. Response status: " + response.status);
         console.log("Response:", response);
@@ -817,6 +820,6 @@ form.addEventListener('submit', async (e) => {
         submitBtn.innerHTML = 'Submit Sales Data';
     }
 });
-</script>
+    </script>
 </body>
 </html>
